@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        <input type="text" id="email" name="email" placeholder="Enter Email" />
+        <input type="password" id="password" name="password" placeholder="Enter Password" />
+        <button type="submit">Login</button>
+    </form>
+    <br />
+    <br />
+    <a href="/auth/sign-up">No account? Sign up</a>
+{% endblock %}

@@ -16,7 +16,9 @@ class User(db.Model):
     )
     reviews = db.relationship("Review", backref="user", passive_deletes=True, lazy=True)
     cart = db.relationship("Cart", backref="user", passive_deletes=True, lazy=True)
-    likes = db.relationship("Like", backref="user", passive_deletes=True, lazy=True)
+    likes = db.relationship(
+        "ReviewLike", backref="user", passive_deletes=True, lazy=True
+    )
 
 
 class Listing(db.Model):
@@ -51,9 +53,6 @@ class Review(db.Model):
     description = db.Column(db.Text, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
-    likes = db.relationship(
-        "ReviewLike", backref="review", passive_deletes=True, lazy=True
-    )
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     listing_id = db.Column(db.Integer, db.ForeignKey("listing.id"), nullable=False)
     likes = db.relationship(

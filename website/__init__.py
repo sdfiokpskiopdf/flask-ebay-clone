@@ -1,4 +1,7 @@
+from website.authfuncs import logged_in
 from flask import Flask
+from flask import url_for
+from flask import session
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -22,6 +25,36 @@ def create_app():
     from .models import Listing
 
     create_database(app)
+
+    # Make permanent session
+    # Set up cookies
+    @app.before_request
+    def setup():
+        session.permanent = True
+
+        try:
+            session["logged_in"]
+        except KeyError:
+            session["logged_in"] = False
+    
+    # Inject login cookie into all/base template
+    @app.context_processor
+    def inject_logged_in():
+        return dict(logged_in=session["logged_in"])
+    
+    # Solves problems related to cache
+    @app.context_processor
+    def override_url_for():
+        return dict(url_for=dated_url_for)
+
+    def dated_url_for(endpoint, **values):
+        if endpoint == 'static':
+            filename = values.get('filename', None)
+            if filename:
+                file_path = os.path.join(app.root_path,
+                                    endpoint, filename)
+                values['q'] = int(os.stat(file_path).st_mtime)
+        return url_for(endpoint, **values)
 
     return app
 

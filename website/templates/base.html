@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap" rel="stylesheet" /> 
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/flash.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/submitonenter.js') }}"></script>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <form method="POST">
+            <input type="text" name="query" class="submit" placeholder="Search for anything" />
+            <button type="submit">&#128269;</button>
+        </form>
+        <nav>
+            <ul class="nav__links">
+                <li><a href="#">Catalogue</a></li>
+                <li><a href="#">Seller</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="https://github.com/pot-noodle-python/flask-ebay-clone">Github</a></li>
+            </ul>
+        </nav>
+        <a class="cta" href="#">Contact</a>
+        <p class="menu cta">Menu</p>
+    </header>
+    <div class="overlay">
+        <a class="close">&times;</a>
+        <div class="overlay__content">
+            <a href="#">Catalogue</a>
+            <a href="#">Seller</a>
+            <a href="#">About</a>
+            <a href="https://github.com/pot-noodle-python/flask-ebay-clone">Github</a>
+        </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %} 
+        {% if messages %} 
+            {% for category, message in messages %} 
+                {% if category == 'error' %}
+                    <div class="message error">
+                        {{ message }}
+                        <button onclick=delete_flash(this)>close</button>
+                    </div>
+                {% else %}
+                    <div class="message success">
+                        {{ message }}
+                        <button onclick=delete_flash(this)>close</button>
+                    </div>
+                {% endif %} 
+            {% endfor %} 
+        {% endif %}
+    {% endwith %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mobile.js') }}"></script>
+</body>
+</html>
